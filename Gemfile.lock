@@ -1,0 +1,33 @@
+PATH
+  remote: .
+  specs:
+    brainfuck (0.0.1)
+      highline
+
+GEM
+  remote: http://rubygems.org/
+  specs:
+    diff-lcs (1.1.2)
+    highline (1.6.1)
+    rspec (2.2.0)
+      rspec-core (~> 2.2)
+      rspec-expectations (~> 2.2)
+      rspec-mocks (~> 2.2)
+    rspec-core (2.2.1)
+    rspec-expectations (2.2.0)
+      diff-lcs (~> 1.1.2)
+    rspec-mocks (2.2.0)
+    simplecov (0.3.7)
+      simplecov-html (>= 0.3.7)
+    simplecov-html (0.3.9)
+
+PLATFORMS
+  java
+  ruby
+
+DEPENDENCIES
+  brainfuck!
+  bundler
+  highline
+  rspec
+  simplecov

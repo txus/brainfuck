@@ -1,0 +1,3 @@
+#!/usr/bin/env ruby
+require 'brainfuck'
+Brainfuck::Interpreter.new.compile File.read(ARGV.first)
