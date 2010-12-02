@@ -25,7 +25,7 @@ You can also require the gem and use inline brainfuck in your ruby scripts like 
 
     require 'brainfuck'
 
-    interpreter = Brainfuck.new
+    interpreter = Brainfuck::Interpreter.new
     interpreter.compile "+++>+++<---"
 
     interpreter.cells
