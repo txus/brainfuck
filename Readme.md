@@ -2,7 +2,7 @@
 
 Just another Brainfuck interpreter in Ruby!
 (If you don't know what Brainfuck is, you definitely
-[should][http://en.wikipedia.org/wiki/Brainfuck]).
+[should](http://en.wikipedia.org/wiki/Brainfuck)).
 
 This interpreter works with MRI 1.8.7, 1.9.2 and JRuby 1.5.5.
 
