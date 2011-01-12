@@ -6,18 +6,16 @@ Just another Brainfuck interpreter in Ruby!
 
 This interpreter works with MRI 1.8.7, 1.9.2 and JRuby 1.5.5.
 
-## Known caveats (yes, before anything)
+## UPDATE: Known caveats solved since 0.1.0!
 
-Ok, I admit it. Nested loops don't work in an extremely reliable manner, so to
-speak. I suggest you NOT TO USE THIS IN PRODUCTION APPS. Yes, forget about
-using this interpreter for that high-security online payment system you wrote in Brainfuck.
-
-Oh and why are nested loops tricky with this interpreter? I was tired and Civilization 5
-was installed in my laptop and... You know, forks and pull requests are always welcome! :)
+Thanks to a complete rewrite using Kaspar Schiess' `parslet` (which you should
+definitely [check it out](http://github.com/kschiess/parslet)) nested loops
+work flawlessly. So yes, you can now run that high-security online payment
+system you wrote in Brainfuck :)
 
 ## Installation and usage
 
-You just `gem install brainfuck`!
+You just `gem install brainfuck` (or `gem 'brainfuck'` in your Gemfile)!
 
 And then: `brainfuck my_file.bf`
 
@@ -25,13 +23,8 @@ You can also require the gem and use inline brainfuck in your ruby scripts like 
 
     require 'brainfuck'
 
-    interpreter = Brainfuck::Interpreter.new
-    interpreter.compile "+++>+++<---"
-
-    interpreter.cells
+    Brainfuck.run "+++>+++<---"
     # => [0, 3]
-
-It's very basic, and needs *a lot* of refactoring, but for now... there you go! ;)
 
 ## Note on Patches/Pull Requests
  
@@ -46,4 +39,4 @@ It's very basic, and needs *a lot* of refactoring, but for now... there you go! 
 
 ## Copyright
 
-Copyright (c) 2010 Josep M. Bach. See LICENSE for details.
+Copyright (c) 2011 Josep M. Bach. See LICENSE for details.

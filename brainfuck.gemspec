@@ -15,6 +15,7 @@ Gem::Specification.new do |s|
   s.rubyforge_project = "brainfuck"
 
   s.add_runtime_dependency "highline"
+  s.add_runtime_dependency "parslet"
   s.add_development_dependency "rspec"
   s.add_development_dependency "bundler"
   s.add_development_dependency "simplecov"

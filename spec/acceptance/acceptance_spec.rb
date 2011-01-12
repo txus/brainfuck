@@ -1,7 +1,9 @@
 require 'spec_helper'
 
 module Brainfuck
-  describe Interpreter, "acceptance specs" do
+  describe "Acceptance specs" do
+
+    subject { Brainfuck }
 
     describe "without loops nor user input" do
       let(:code) do
@@ -10,17 +12,11 @@ module Brainfuck
         EOS
       end
       it "sets two cells to 2 and 1" do
-        subject.should_receive(:code).and_return code
-        subject.compile(code)
-        subject.cells.should == [2,1]
+        subject.run(code).should == [2,1]
       end
       it "prints 2 and 1" do
-        output = double('output')
-        subject.should_receive(:stdout).twice.and_return(output)
-        output.should_receive(:print).with(1.chr).ordered
-        output.should_receive(:print).with(2.chr).ordered
-
-        subject.compile(code)
+        $stdout.should_receive(:print).twice
+        subject.run code
       end
     end
 
@@ -31,11 +27,12 @@ module Brainfuck
         EOS
       end
       it "sets the first cell to a + 4" do
-        input = double('input')
-        subject.should_receive(:get_character).once.and_return 97
+        stack = Stack.new
+        Interpreter.stub(:stack).and_return stack
 
-        subject.compile(code)
-        subject.current.should == 101
+        stack.should_receive(:get_character).once.and_return 97
+
+        subject.run(code).should == [101]
       end
     end
 
@@ -46,29 +43,30 @@ module Brainfuck
         EOS
       end
       it "runs the loop 4 times" do
-        subject.compile(code)
-        subject.current.should == 1
+        subject.run(code).should == [1]
       end
     end
     
     describe "cell hopping examples" do
 
       it "transfers the content from one cell to another" do
-        subject.cells = [10]
-        subject.compile("[>+<-]")
-        subject.cells.should == [0,10]
+        subject.run("++++++++++      [>+<-]").should == [0,10]
       end
 
       it "transfers the content from one cell to the third" do
-        subject.cells = [10]
-        subject.compile("[>+<-]>[>+<-]")
-        subject.cells.should == [0,0,10]
+        subject.run("++++++++++      [>+<-]>[>+<-]").should == [0,0,10]
       end
 
       it "transfers the content from one cell to the third and back to the second" do
-        subject.cells = [10]
-        subject.compile("[>+<-]>[>+<-]>[<+>-]")
-        subject.cells.should == [0,10,0]
+        subject.run("++++++++++      [>+<-]>[>+<-]>[<+>-]").should == [0,10,0]
+      end
+
+    end
+
+    describe "nested loop examples" do
+
+      it "work flawlessly" do
+        subject.run("[++++++++++[-]+-+-]").should == [0]
       end
 
     end
@@ -76,7 +74,7 @@ module Brainfuck
     describe "hello world" do
 
       it "displays hello world" do
-        subject.compile <<-EOS
+        subject.run <<-EOS
           +++++ +++++            
           [                      
               > +++++ ++         

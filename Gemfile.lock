@@ -1,14 +1,18 @@
 PATH
   remote: .
   specs:
-    brainfuck (0.0.1)
+    brainfuck (0.1.0)
       highline
+      parslet
 
 GEM
   remote: http://rubygems.org/
   specs:
+    blankslate (2.1.2.3)
     diff-lcs (1.1.2)
     highline (1.6.1)
+    parslet (1.0.0)
+      blankslate (~> 2.1.2.3)
     rspec (2.2.0)
       rspec-core (~> 2.2)
       rspec-expectations (~> 2.2)
@@ -29,5 +33,6 @@ DEPENDENCIES
   brainfuck!
   bundler
   highline
+  parslet
   rspec
   simplecov
