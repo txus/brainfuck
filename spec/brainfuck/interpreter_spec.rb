@@ -13,7 +13,7 @@ module Brainfuck
 
     describe "rules" do
       %w{fwd bwd inc dec puts gets iteration exp}.each do |rule|
-        it 'implements a rule for :#{rule} node' do
+        it "implements a rule for :#{rule} node" do
           subject.rules.map(&:first).map do |pattern|
             pattern.instance_variable_get(:@pattern)
           end.map(&:keys).flatten.should include(:"#{rule}")

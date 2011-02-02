@@ -17,7 +17,7 @@ module Brainfuck
 
     describe "rules" do
       %w{lparen rparen space space? fwd bwd inc dec puts gets iteration expression}.each do |rule|
-        it 'implements a rule for :#{rule} node' do
+        it "implements a rule for :#{rule} node" do
           subject.should respond_to(:"#{rule}")
         end
       end

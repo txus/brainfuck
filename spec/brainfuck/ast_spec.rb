@@ -8,7 +8,7 @@ module Brainfuck
       describe "AST::#{node.capitalize}Node" do
         subject { eval("AST::#{node.capitalize}Node").new stack }
         describe "#eval" do
-          it 'calls stack##{node}' do
+          it "calls stack##{node}" do
             subject.stack.should_receive(node)
             subject.eval
           end
