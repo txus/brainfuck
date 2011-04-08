@@ -9,7 +9,7 @@ Rake::TestTask.new do |t|
 end
 
 require 'rake/testtask'
-desc 'Run acceptance tests (Scheme programs inside examples/ directory)'
+desc 'Run acceptance tests'
 Rake::TestTask.new :acceptance do |t|
   t.libs << "test"
   t.test_files = FileList['test/acceptance/**/*_test.rb']
