@@ -50,12 +50,6 @@ module Brainfuck
       CodeLoader.execute_file @rest.first, nil, @print
     end
 
-    # # Run the Brainfuck REPL unless we were given an script
-    # def repl
-    #   require 'brainfuck/repl'
-    #   ReadEvalPrintLoop.new(@print).main
-    # end
-
     # Parse command line options
     def options(argv)
       options = Rubinius::Options.new "Usage: brainfuck [options] [program]", 20
@@ -63,33 +57,33 @@ module Brainfuck
       options.doc ""
       options.doc "OPTIONS:"
 
-      options.on "-", "Read and evalute code from STDIN" do
-        @evals << STDIN.read
-      end
+      # options.on "-", "Read and evalute code from STDIN" do
+      #   @evals << STDIN.read
+      # end
 
-      options.on "--print-ast", "Print the Brainfuck AST" do
-        @print.ast = true
-      end
+      # options.on "--print-ast", "Print the Brainfuck AST" do
+      #   @print.ast = true
+      # end
 
-      options.on "--print-asm", "Print the Rubinius ASM" do
-        @print.asm = true
-      end
+      # options.on "--print-asm", "Print the Rubinius ASM" do
+      #   @print.asm = true
+      # end
 
-      options.on "--print-sexp", "Print the Brainfuck Sexp" do
-        @print.sexp = true
-      end
+      # options.on "--print-sexp", "Print the Brainfuck Sexp" do
+      #   @print.sexp = true
+      # end
 
-      options.on "--print-all", "Print Sexp, AST and Rubinius ASM" do
-        @print.ast = @print.asm = @print.sexp = true
-      end
+      # options.on "--print-all", "Print Sexp, AST and Rubinius ASM" do
+      #   @print.ast = @print.asm = @print.sexp = true
+      # end
 
       options.on "-C", "--compile", "Just batch compile dont execute." do
         @compile_only = true
       end
-
-      options.on "-e", "CODE", "Execute CODE" do |e|
-        @evals << e
-      end
+# 
+#       options.on "-e", "CODE", "Execute CODE" do |e|
+#         @evals << e
+#       end
 
       options.on "-h", "--help", "Display this help" do
         puts options
@@ -99,10 +93,6 @@ module Brainfuck
       options.doc ""
 
       @rest = options.parse(argv)
-
-      # if ENV['DEBUG']
-      #   @print.ast = @print.asm = @print.sexp = true
-      # end
     end
 
   end

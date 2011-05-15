@@ -1,30 +1,36 @@
 # brainfuck
 
-Just another Brainfuck interpreter in Ruby!
+An implementation of Brainfuck on the [Rubinius](http://rubini.us) VM.
+
 (If you don't know what Brainfuck is, you definitely
 [should](http://en.wikipedia.org/wiki/Brainfuck)).
 
-This interpreter works with MRI 1.8.7, 1.9.2 and JRuby 1.5.5.
-
-## UPDATE: Known caveats solved since 0.1.0!
-
-Thanks to a complete rewrite using Kaspar Schiess' `parslet` (which you should
-definitely [check it out](http://github.com/kschiess/parslet)) nested loops
-work flawlessly. So yes, you can now run that high-security online payment
-system you wrote in Brainfuck :)
+Obviously... needs Rubinius!
 
 ## Installation and usage
 
 You just `gem install brainfuck` (or `gem 'brainfuck'` in your Gemfile)!
 
-And then: `brainfuck my_file.bf`
+And then: 
+
+    $ brainfuck my_file.bf
+
+Or if you just want to generate the compiled bytecode in `my_file.bfc`:
+
+    $ brainfuck -C my_file.bf
 
 You can also require the gem and use inline brainfuck in your ruby scripts like this:
 
     require 'brainfuck'
 
-    Brainfuck.run "+++>+++<---"
+    # Brainfuck needs an object binding to do its stuff.
+    bnd = Object.new
+    def bnd.get; binding; end
+    bnd = bnd.get
+
+    Brainfuck::CodeLoader.execute_code "+++>+++<---", bnd, nil
     # => [0, 3]
+
 
 ## Note on Patches/Pull Requests
  
