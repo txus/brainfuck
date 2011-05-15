@@ -9,17 +9,15 @@ Gem::Specification.new do |s|
   s.authors     = ["Josep M. Bach"]
   s.email       = ["josep.m.bach@gmail.com"]
   s.homepage    = "http://github.com/txus/brainfuck"
-  s.summary     = %q{Another Brainfuck interpreter in Ruby}
-  s.description     = %q{Another Brainfuck interpreter in Ruby}
+  s.summary     = %q{An implementation of Brainfuck on the Rubinius VM.}
+  s.description = %q{An implementation of Brainfuck on the Rubinius VM.}
 
   s.rubyforge_project = "brainfuck"
 
-  s.add_runtime_dependency "highline"
   s.add_runtime_dependency "parslet"
 
   s.add_development_dependency "minitest"
   s.add_development_dependency "mocha"
-  s.add_development_dependency "simplecov"
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")

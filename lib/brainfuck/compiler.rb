@@ -63,17 +63,13 @@ module Brainfuck
       end
     end
 
-    class Print < Struct.new(:sexp, :ast, :heap, :asm)
+    class Print < Struct.new(:sexp, :ast, :asm)
       def sexp?
         @sexp
       end
 
       def ast?
         @ast
-      end
-
-      def heap?
-        @heap
       end
 
       def asm?

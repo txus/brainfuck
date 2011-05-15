@@ -2,15 +2,17 @@ require 'test_helper'
 
 class BrainfuckAcceptanceTest < MiniTest::Unit::TestCase
 
+  def test_ok
+    assert_evaluates [2,1], "++++>++++---.<--."
+  end
+
   def test_without_loops_nor_user_input
-    $stdout.expects(:print).times(2)
+    STDOUT.expects(:putc).times(2)
     assert_evaluates [2,1], "++++>++++---.<--."
   end
 
   def test_with_user_input
-    stack = Brainfuck::Stack.new
-    Brainfuck::Interpreter.stubs(:stack).returns stack
-    stack.expects(:get_character).returns 97
+    STDIN.expects(:getc).returns 97
 
     assert_evaluates [101], ",++++"
   end
@@ -64,6 +66,10 @@ class BrainfuckAcceptanceTest < MiniTest::Unit::TestCase
   private
 
   def assert_evaluates(expected, code)
-    assert_equal expected, Brainfuck.run(code)
+    bnd = Object.new
+    def bnd.get; binding; end
+    bnd = bnd.get
+    mod = nil
+    assert_equal expected, Brainfuck::CodeLoader.execute_code(code, bnd, mod)
   end
 end

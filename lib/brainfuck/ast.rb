@@ -83,11 +83,13 @@ module Brainfuck
     end
     class PutsNode
       def bytecode(g)
+        g.push_const :STDOUT
+
         g.push_local 0
         g.push_local 1
         g.send :[], 1, false
-        g.send :chr, 0, true
-        g.send :puts, 1, true
+
+        g.send :putc, 1, true
       end
     end
     class GetsNode

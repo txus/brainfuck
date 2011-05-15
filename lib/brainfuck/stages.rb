@@ -56,7 +56,8 @@ module Brainfuck
         bottom.set!
       
         @output.use_detected
-        @output.push_nil
+        # Return the heap
+        @output.push_local 0
         @output.ret
         @output.close
 
@@ -130,7 +131,7 @@ module Brainfuck
       end
 
       def run
-        code = Lexer.clean(File.read(@filename))
+        code = Lexer.clean(@code)
         @output = Lexer.new.tokenize(code)
         pp(@output) if @print.sexp?
         run_next

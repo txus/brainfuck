@@ -79,10 +79,6 @@ module Brainfuck
         @print.sexp = true
       end
 
-      options.on "--print-heap", "Print the heap and the pointer at the end" do
-        @print.heap = true
-      end
-
       options.on "--print-all", "Print Sexp, AST and Rubinius ASM" do
         @print.ast = @print.asm = @print.sexp = true
       end
