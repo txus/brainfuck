@@ -4,10 +4,7 @@ module Brainfuck
 
   # Command line interface to Brainfuck.
   #
-  # It should support the same command line options than the `brainfuck'
-  # program. And additional options specific to Brainfuck and Rubinius.
-  #
-  # But currently we only take a brainfuck source name to compile and
+  # Currently we only take a brainfuck source name to compile and
   # run.
   #
   class Main
@@ -21,7 +18,6 @@ module Brainfuck
 
     def main(argv=ARGV)
       options(argv)
-      # return repl if @rest.empty? && @evals.empty? && !@compile_only
       evals unless @evals.empty?
       script unless @rest.empty?
       compile if @compile_only
@@ -29,9 +25,9 @@ module Brainfuck
 
     # Batch compile all brainfuck files given as arguments.
     def compile
-      @rest.each do |py|
+      @rest.each do |bf|
         begin
-          Compiler.compile_file py, nil, @print
+          Compiler.compile_file bf, nil, @print
         rescue Compiler::Error => e
           e.show
         end
@@ -64,8 +60,6 @@ module Brainfuck
     def options(argv)
       options = Rubinius::Options.new "Usage: brainfuck [options] [program]", 20
       options.doc "Brainfuck is a Brainfuck implementation for the Rubinius VM."
-      options.doc "It is inteded to expose the same command line options as"
-      options.doc "the `brainfuck` program and some Rubinius specific options."
       options.doc ""
       options.doc "OPTIONS:"
 
@@ -83,6 +77,10 @@ module Brainfuck
 
       options.on "--print-sexp", "Print the Brainfuck Sexp" do
         @print.sexp = true
+      end
+
+      options.on "--print-heap", "Print the heap and the pointer at the end" do
+        @print.heap = true
       end
 
       options.on "--print-all", "Print Sexp, AST and Rubinius ASM" do
@@ -105,6 +103,10 @@ module Brainfuck
       options.doc ""
 
       @rest = options.parse(argv)
+
+      # if ENV['DEBUG']
+      #   @print.ast = @print.asm = @print.sexp = true
+      # end
     end
 
   end

@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    brainfuck (0.1.2)
+    brainfuck (0.2.0)
       highline
       parslet
 
@@ -9,7 +9,7 @@ GEM
   remote: http://rubygems.org/
   specs:
     blankslate (2.1.2.4)
-    highline (1.6.1)
+    highline (1.6.2)
     minitest (2.0.2)
     mocha (0.9.12)
     parslet (1.2.0)

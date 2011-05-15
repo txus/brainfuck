@@ -3,3 +3,4 @@ pkg/*
 .bundle
 coverage
 *.rbc
+*.bfc

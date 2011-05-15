@@ -1,31 +1,16 @@
 module Brainfuck
-  class Parser < Parslet::Parser
-    INSTRUCTIONS = %w{> < + - [ ] . ,}
+  class Parser < Parslet::Transform
+    rule(:fwd => simple(:fwd))            { AST::FwdNode.new }
+    rule(:bwd => simple(:bwd))            { AST::BwdNode.new }
 
-    class << self
-      def clean code
-        code.chars.select {|c| INSTRUCTIONS.include? c }.join
-      end
-    end
+    rule(:inc => simple(:inc))            { AST::IncNode.new }
+    rule(:dec => simple(:dec))            { AST::DecNode.new }
 
-    rule(:lparen)     { str('[') >> space? }
-    rule(:rparen)     { str(']') >> space? }
+    rule(:puts => simple(:puts))          { AST::PutsNode.new }
+    rule(:gets => simple(:gets))          { AST::GetsNode.new }
 
-    rule(:space)      { match('\s').repeat(1) }
-    rule(:space?)     { space.maybe }
+    rule(:iteration => subtree(:iteration)) { AST::IterationNode.new(iteration) }
 
-    rule(:fwd)        { str('>') >> space? }
-    rule(:bwd)        { str('<') >> space? }
-
-    rule(:inc)        { str('+') >> space? }
-    rule(:dec)        { str('-') >> space? }
-
-    rule(:puts)       { str('.') >> space? }
-    rule(:gets)       { str(',') >> space? }
-
-    rule(:iteration)  { lparen >> expression >> rparen }
-
-    rule(:expression) { (iteration.as(:iteration) | fwd.as(:fwd) | bwd.as(:bwd) | inc.as(:inc) | dec.as(:dec) | puts.as(:puts) | gets.as(:gets)).repeat.as(:exp) }
-    root :expression
+    rule(:exp => subtree(:exp)) { AST::Script.new(exp) }
   end
 end

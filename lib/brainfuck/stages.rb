@@ -1,7 +1,9 @@
+require 'pp'
 module Brainfuck
   class Stage
 
-    # This stage takes a tree of brainfuck::AST nodes and
+    
+    # This stage takes a tree of Brainfuck::AST nodes and
     # simply calls the bytecode method on them.
     class Generator < Rubinius::Compiler::Stage
       next_stage Rubinius::Compiler::Encoder
@@ -15,14 +17,48 @@ module Brainfuck
       end
 
       def run
-        root = @root.new @input
-        root.file = @compiler.parser.filename
-
         @output = Rubinius::Generator.new
-        root.variable_scope = @variable_scope
-        root.bytecode @output
 
-        puts @output.inspect
+        @output.set_line Integer(1)
+
+        # ENVIRONMENT INITIALIZATION
+        # --------------------------
+        
+        # Initialize the heap as a one-cell array containing zero,
+        # and the pointer as a zero integer.
+        @output.meta_push_0
+        @output.set_local 1
+        @output.cast_array
+        @output.set_local 0
+
+        @input.bytecode @output
+
+        bottom = @output.new_label
+
+        @output.push_const :ENV
+        @output.push_literal "DEBUG"
+        @output.send :[], 1, false
+
+        @output.gif bottom
+
+        # Print the heap and the pointer if ENV['DEBUG']
+        @output.push_literal "Heap: "
+
+        @output.push_local 0
+        @output.send :inspect, 0
+
+        @output.push_literal "\nPointer: "
+        @output.push_local 1
+        @output.push_literal "\n"
+        @output.send :print, 5, true
+        # end Print
+
+        bottom.set!
+      
+        @output.use_detected
+        @output.push_nil
+        @output.ret
+        @output.close
 
         run_next
       end
@@ -49,18 +85,12 @@ module Brainfuck
 
       def run
         @output = @input
-        if @compiler.generator.root == Rubinius::AST::EvalExpression
-          @output = @output.node # drop top module node, only use stmt
-          if @output.nodes.last.kind_of?(AST::DiscardNode)
-            @output.nodes[-1] = @output.nodes.last.expr
-          end
-        end
         run_next
       end
     end
 
-    # This stage takes a ruby array as produced by bin/astpretty.py
-    # and produces a tree of brainfuck::AST nodes.
+    # This stage takes a ruby array as produced by the lexer
+    # and produces a tree of Brainfuck::AST nodes.
     class BfAST < Rubinius::Compiler::Stage
       next_stage EvalExpr
 
@@ -70,7 +100,7 @@ module Brainfuck
       end
 
       def run
-        @output = Brainfuck::Interpreter.new.apply @input
+        @output = Brainfuck::Parser.new.apply @input
         pp(@output) if @compiler.parser.print.ast?
         run_next
       end
@@ -100,16 +130,15 @@ module Brainfuck
       end
 
       def run
-        @output = Brainfuck::Parser.new.parse(@code)
+        code = Lexer.clean(File.read(@filename))
+        @output = Lexer.new.tokenize(code)
         pp(@output) if @print.sexp?
         run_next
       end
     end
 
-    # This stage takes a python filename and produces a ruby array
-    # containing representation of the python source.
-    # We are currently using python's own parser, so we just
-    # read the sexp as its printed by bin/astpretty.py
+    # This stage takes a brainfuck filename and produces a ruby array
+    # containing representation of the brainfuck source.
     class BfFile < Rubinius::Compiler::Stage
 
       stage :brainfuck_file
@@ -129,7 +158,8 @@ module Brainfuck
       end
 
       def run
-        @output = Parser.new.parse(File.read(@filename))
+        code = Lexer.clean(File.read(@filename))
+        @output = Lexer.new.tokenize(code)
         pp(@output) if @print.sexp?
         run_next
       end

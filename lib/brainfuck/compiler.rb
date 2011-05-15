@@ -14,14 +14,13 @@ module Brainfuck
     end
 
     def self.compile_if_needed(file, output = nil, print = Print.new)
-      puts file.inspect
       compiled = output || compiled_filename(file)
       needed = @always_recompile || !File.exists?(compiled) ||
         File.stat(compiled).mtime < File.stat(file).mtime
       if needed
         compile_file(file, compiled, print)
       else
-        Rubinius::CodeLoader.new(compiled).load_compiled_file(compiled, 0)
+        Brainfuck::CodeLoader.new(compiled).load_compiled_file(compiled, 0)
       end
     end
 
@@ -32,7 +31,7 @@ module Brainfuck
 
       parser.input file
 
-      compiler.generator.root = Rubinius::AST::Script
+      compiler.generator = Rubinius::Generator.new
       compiler.writer.name = output || compiled_filename(file)
 
       parser.print = print
@@ -64,13 +63,17 @@ module Brainfuck
       end
     end
 
-    class Print < Struct.new(:sexp, :ast, :asm)
+    class Print < Struct.new(:sexp, :ast, :heap, :asm)
       def sexp?
         @sexp
       end
 
       def ast?
         @ast
+      end
+
+      def heap?
+        @heap
       end
 
       def asm?

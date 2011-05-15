@@ -1,5 +1,5 @@
 module Brainfuck
-  class CodeLoader
+  class CodeLoader < Rubinius::CodeLoader
 
     def self.execute_code(code, binding, from_module, print = Compiler::Print.new)
       cm = Compiler.compile_for_eval(code, binding.variables,
@@ -19,10 +19,7 @@ module Brainfuck
       be.call
     end
 
-    # Takes a .py file name, compiles it if needed and executes it.
-    # Sets the module name to be __main__, so this should be called
-    # only on the main program. For loading other python modules from
-    # it use the load_module method.
+    # Takes a .bf file name, compiles it if needed and executes it.
     def self.execute_file(name, compile_to = nil, print = Compiler::Print.new)
       cm = Compiler.compile_if_needed(name, compile_to, print)
       ss = ::Rubinius::StaticScope.new Object
