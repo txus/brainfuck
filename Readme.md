@@ -31,7 +31,6 @@ You can also require the gem and use inline brainfuck in your ruby scripts like 
     Brainfuck::CodeLoader.execute_code "+++>+++<---", bnd, nil
     # => [0, 3]
 
-
 ## Note on Patches/Pull Requests
  
 * Fork the project.
@@ -46,3 +45,4 @@ You can also require the gem and use inline brainfuck in your ruby scripts like 
 ## Copyright
 
 Copyright (c) 2011 Josep M. Bach. See LICENSE for details.
+
